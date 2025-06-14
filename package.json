@@ -1,19 +1,19 @@
 {
-  "name": "n8n-nodes-<...>",
+  "name": "n8n-nodes-mcp-fxai",
   "version": "0.1.0",
-  "description": "",
+  "description": "Mcp fxai from n8n",
   "keywords": [
     "n8n-community-node-package"
   ],
   "license": "MIT",
   "homepage": "",
   "author": {
-    "name": "",
-    "email": ""
+    "name": "fengx",
+    "email": "heiyexinghai@gmail.com"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/<...>/n8n-nodes-<...>.git"
+    "url": "https://github.com/efengx/n8n-nodes-mcp-fxai.git"
   },
   "engines": {
     "node": ">=20.15"
@@ -33,23 +33,41 @@
   "n8n": {
     "n8nNodesApiVersion": 1,
     "credentials": [
-      "dist/credentials/ExampleCredentialsApi.credentials.js",
-      "dist/credentials/HttpBinApi.credentials.js"
+      "dist/credentials/McpReplicateApi.credentials.js"
     ],
     "nodes": [
-      "dist/nodes/ExampleNode/ExampleNode.node.js",
-      "dist/nodes/HttpBin/HttpBin.node.js"
+      "dist/nodes/McpMain/McpMain.node.js",
+      "dist/nodes/mcp_trigger/McpReplicate/McpReplicate.node.js"
     ]
   },
   "devDependencies": {
+    "@types/express": "^5.0.2",
+    "@types/lodash": "^4.17.17",
     "@typescript-eslint/parser": "~8.32.0",
     "eslint": "^8.57.0",
     "eslint-plugin-n8n-nodes-base": "^1.16.3",
     "gulp": "^5.0.0",
+    "n8n-workflow": "^1.82.0",
+    "patch-package": "^8.0.0",
     "prettier": "^3.5.3",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.8.2"
   },
   "peerDependencies": {
     "n8n-workflow": "*"
+  },
+  "dependencies": {
+    "@langchain/community": "0.3.24",
+    "@langchain/core": "0.3.30",
+    "@modelcontextprotocol/sdk": "1.10.2",
+    "langchain": "0.3.11",
+    "replicate": "0.29.4",
+    "tmp-promise": "^3.0.3"
+  },
+  "overrides": {
+    "pkce-challenge": "3.0.0"
+  },
+  "resolutions": {
+    "@langchain/core": "0.3.30"
   }
 }

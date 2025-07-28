@@ -59,10 +59,16 @@
   "dependencies": {
     "@langchain/community": "0.3.24",
     "@langchain/core": "0.3.30",
+    "@langchain/textsplitters": "^0.1.0",
     "@modelcontextprotocol/sdk": "1.10.2",
+    "@n8n/json-schema-to-zod": "^1.1.0",
+    "generate-schema": "^2.6.0",
     "langchain": "0.3.11",
+    "pyodide": "^0.26.4",
     "replicate": "0.29.4",
-    "tmp-promise": "^3.0.3"
+    "tmp-promise": "^3.0.3",
+    "zod": "^3.25.64",
+    "zod-to-json-schema": "^3.24.5"
   },
   "overrides": {
     "pkce-challenge": "3.0.0"

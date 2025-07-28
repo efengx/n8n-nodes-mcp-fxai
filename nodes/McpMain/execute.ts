@@ -20,6 +20,7 @@ import {
 
 import { SYSTEM_MESSAGE } from './prompt';
 
+
 /* -----------------------------------------------------------
    Main Executor Function
 ----------------------------------------------------------- */
@@ -47,8 +48,6 @@ export async function toolsAgentExecute(this: IExecuteFunctions): Promise<INodeE
 	) as number;
 	const memory = await getOptionalMemory(this);
 	const model = await getChatModel(this);
-	// 开启模型日志
-	// model.verbose = true;
 
 	for (let i = 0; i < items.length; i += batchSize) {
 		const batch = items.slice(i, i + batchSize);
@@ -126,7 +125,6 @@ export async function toolsAgentExecute(this: IExecuteFunctions): Promise<INodeE
 			const itemIndex = i + index;
 			if (result.status === 'rejected') {
 				const error = result.reason as Error;
-				console.log("error:", result);
 				if (this.continueOnFail()) {
 					returnData.push({
 						json: { error: error.message },

@@ -2,7 +2,7 @@ import type { BaseChatMessageHistory } from '@langchain/core/chat_history';
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
 import type { BaseLLM } from '@langchain/core/language_models/llms';
 import type { BaseMessage } from '@langchain/core/messages';
-import type { Tool } from '@langchain/core/tools';
+import { type Tool } from '@langchain/core/tools';
 import { Toolkit } from 'langchain/agents';
 import type { BaseChatMemory } from 'langchain/memory';
 import { NodeConnectionType, NodeOperationError, jsonStringify } from 'n8n-workflow';
@@ -197,6 +197,15 @@ export const getConnectedTools = async (
 	).flatMap((toolOrToolkit) => {
 		if (toolOrToolkit instanceof Toolkit) {
 			return toolOrToolkit.getTools() as Tool[];
+		} else if (Object.prototype.hasOwnProperty.call(toolOrToolkit, 'tools')) {
+			/**
+			 * 适配McpToolkit工具的返回信息, 因McpToolkit对象在n8n Mcp节点组下, 自定义节点无法调用.
+			 * 此处采用Duck Typing的方式进行模糊匹配.
+			 */
+			const potentialTools = (toolOrToolkit as { tools?: unknown }).tools;
+			if (Array.isArray(potentialTools)) {
+				return potentialTools as Tool[];
+			}
 		}
 
 		return toolOrToolkit;
@@ -228,7 +237,6 @@ export const getConnectedTools = async (
 			finalTools.push(tool);
 		}
 	}
-
 	return finalTools;
 };
 

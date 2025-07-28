@@ -19,6 +19,10 @@
 		"declaration": true,
 		"sourceMap": true,
 		"skipLibCheck": true,
+		"typeRoots": [
+      "./node_modules/@types",
+      "./types"
+    ],
 		"outDir": "./dist/",
 	},
 	"include": [
@@ -27,6 +31,7 @@
 		"nodes/**/**/*",
 		"nodes/**/*.json",
 		"utils/**/*",
+		"type/**/*",
 		"package.json",
 	],
 	"exclude": [

@@ -2,6 +2,7 @@ import type { INodeTypeBaseDescription, IVersionedNodeType } from 'n8n-workflow'
 import { VersionedNodeType } from 'n8n-workflow';
 import { MainV1 } from './MainV1';
 
+
 export class McpMain extends VersionedNodeType {
 	constructor() {
 		const baseDescription: INodeTypeBaseDescription = {

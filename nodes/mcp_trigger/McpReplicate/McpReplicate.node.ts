@@ -3,7 +3,7 @@ import {
 	INodeTypeDescription,
 	IWebhookResponseData,
 } from 'n8n-workflow';
-import { NodeConnectionType, Node } from 'n8n-workflow';
+import { NodeConnectionType, INodeType } from 'n8n-workflow';
 import { getConnectedTools } from '../../../utils/helpers';
 import type { CompressionResponse } from './FlushingSSEServerTransport';
 import { McpServerSingleton } from './McpServer';
@@ -12,7 +12,7 @@ import type { McpServer } from './McpServer';
 const MCP_SSE_SETUP_PATH = 'sse';
 const MCP_SSE_MESSAGES_PATH = 'messages';
 
-export class McpReplicate extends Node {
+export class McpReplicate implements INodeType {
 	description: INodeTypeDescription = {
 		displayName: 'MCP Replicate Trigger',
 		name: 'mcpReplicate',
@@ -50,10 +50,6 @@ export class McpReplicate extends Node {
 			activationHint:
 				'Once you’ve finished building your workflow, run it without having to click this button by using the production URL.',
 		},
-
-		/**
-		 * 确定组件的UI样式
-		 */
 		inputs: [
 			{
 				type: NodeConnectionType.AiTool,
@@ -61,24 +57,7 @@ export class McpReplicate extends Node {
 			},
 		],
 		outputs: [],
-		outputNames: ['Tool'],
-
-		/**
-		 * 组件参数
-		 */
 		properties: [
-			{
-				displayName: 'Authentication',
-				name: 'authentication',
-				type: 'options',
-				options: [
-					{ name: 'None', value: 'none' },
-					{ name: 'Bearer Auth', value: 'bearerAuth' },
-					{ name: 'Header Auth', value: 'headerAuth' },
-				],
-				default: 'none',
-				description: 'The way to authenticate',
-			},
 			{
 				displayName: 'Path',
 				name: 'path',
@@ -111,26 +90,14 @@ export class McpReplicate extends Node {
 				ndvHideUrl: true,
 			},
 		],
-	};
+	}
 
-	async webhook(context: IWebhookFunctions): Promise<IWebhookResponseData> {
-		const webhookName = context.getWebhookName();
-		const req = context.getRequestObject();
-		const resp = context.getResponseObject() as unknown as CompressionResponse;
+	async webhook(this: IWebhookFunctions): Promise<IWebhookResponseData> {
+		const webhookName = this.getWebhookName();
+		const req = this.getRequestObject();
+		const resp = this.getResponseObject() as unknown as CompressionResponse;
 
-		// 验证Webhook Authentication
-		// try {
-		// 	await validateWebhookAuthentication(context, 'authentication');
-		// } catch (error) {
-		// 	if (error instanceof WebhookAuthorizationError) {
-		// 		resp.writeHead(error.responseCode);
-		// 		resp.end(error.message);
-		// 		return { noWebhookResponse: true };
-		// 	}
-		// 	throw error;
-		// }
-
-		const mcpServer: McpServer = McpServerSingleton.instance(context.logger);
+		const mcpServer: McpServer = McpServerSingleton.instance(this.logger);
 
 		if (webhookName === 'setup') {
 			// Sets up the transport and opens the long-lived connection. This resp
@@ -146,8 +113,7 @@ export class McpReplicate extends Node {
 			// This is the command-channel, and is actually executing the tools. This
 			// sends the response back through the long-lived connection setup in the
 			// 'setup' call
-			const connectedTools = await getConnectedTools(context, true);
-
+			const connectedTools = await getConnectedTools(this, true);
 			const wasToolCall = await mcpServer.handlePostMessage(req, resp, connectedTools);
 
 			if (wasToolCall) return { noWebhookResponse: true, workflowData: [[{ json: {} }]] };

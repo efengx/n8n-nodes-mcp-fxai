@@ -1,7 +1,7 @@
 services:
 
   n8n:
-    image: docker.n8n.io/n8nio/n8n
+    image: registry.cn-hangzhou.aliyuncs.com/rjxai/n8n:latest
     restart: always
     ports:
       - "0.0.0.0:8081:8080"

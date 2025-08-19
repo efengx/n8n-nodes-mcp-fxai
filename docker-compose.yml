@@ -1,0 +1,12 @@
+services:
+
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    restart: always
+    ports:
+      - "0.0.0.0:8081:8080"
+    env_file:
+      - .env
+    volumes:
+      - "C:/Users/Administrator/.n8n:/home/node/.n8n"
+      - ./local-files:/files
